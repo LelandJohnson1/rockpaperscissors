@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="style.css" />
+  <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
 <body>
 
@@ -13,10 +13,9 @@
 
 <!--Will pump in score and messages here with javascript-->
 <div class="Scoreboard">
-
-<div class="leftScore">
-<p>You</p>
-<p class="theScore" id="yourScore">0</p>
+        <div class="leftScore">
+                <p>You</p>
+                <p class="theScore" id="yourScore">0</p>
 </div>
 <div class="messageBoard"></div>
 <div class="rightScore">
@@ -38,15 +37,13 @@
 </div>
 
 </div>
+
 <button class='reset'>Reset</button>
+
+
+
+
 <script>
-
-//In our UI, the player should be able to play the game by clicking on buttons rather than typing their answer in a prompt.
-//a. For now, remove the logic that plays exactly five rounds.
-//b. Create three buttons, one for each selection. Add an event listener to the buttons that calls your playRound function with the correct playerSelection every time a button is clicked. (you can keep the console.logs for this step)
-//c. Add a div for displaying results and change all of your console.logs into DOM methods.
-//d. Display the running score, and announce a winner of the game once one player reaches 5 points.
-
 //WHAT I LEARNED
 //IF STATEMENTS CAN BE USED OUTSIDE OF FUNCTIONS
 //DO NOT USE COMMAS TO REFRENCE TWO SWITCH PARAMETERS
@@ -55,179 +52,165 @@
 const rock=document.querySelector('.Rock');
 const paper=document.querySelector('.Paper');
 const scissors=document.querySelector('.Scissors');
-
 const messageBoard=document.querySelector('.messageBoard');
-
 const yourScore=document.querySelector('#yourScore');
 const computerScore=document.querySelector('#computerScore');
-
 const reset=document.querySelector('.reset');
-
 let compSelection=document.querySelector('.computerChoice');
+let computerChoice; 
+let userChoice;
 
 rock.addEventListener('click',computerchoice);
 paper.addEventListener('click',computerchoice);
 scissors.addEventListener('click',computerchoice);
-
 reset.addEventListener('click',resetGame);
 
-
-let computerChoice; 
-let userChoice;
 
 yourScore.textContent=Number(0);
 computerScore.textContent=Number(0);
 
 
-
 function computerchoice(choice) { 
-choice=this.getAttribute('class');
-userChoice=choice;
 
+      choice=this.getAttribute('class');
+      userChoice=choice;
 
-const numberGen=Math.random();
+      const numberGen=Math.random();
+      messageBoard.textContent='';
 
-messageBoard.textContent='';
+      if (numberGen<=0.2) {
 
-if (numberGen<=0.2) {computerChoice="Rock";
+              computerChoice="Rock";
+              compSelection.textContent="Rock";
+              compare();
 
-compSelection.textContent="Rock";
+      }
 
-compare();
+      else if (numberGen>0.2 && numberGen<=0.5) {
 
-}
+              computerChoice="Paper";
+              compSelection.textContent="Paper";
+              compare();
 
-else if (numberGen>0.2 && numberGen<=0.5) {computerChoice="Paper";
-compSelection.textContent="Paper";
+      }
 
-compare();
-}
+      else {
 
-else{computerChoice="Scissors";
+              computerChoice="Scissors";
+              compSelection.textContent="Scissors";
+              compare();
 
-compSelection.textContent="Scissors";
-
-compare();
-
-}
-
-console.log(numberGen,computerChoice);
+      }
 
 }
 
 
 function compare () {
  
+      let counterYou=Number(yourScore.textContent);
+      let counterComp=Number(computerScore.textContent);
 
-  //START HERE!!!!!
-  let counterYou=Number(yourScore.textContent);
-  let counterComp=Number(computerScore.textContent);
+      
+      switch (true) {
 
-  console.log(counterYou,counterComp);
+      case counterYou===4: messageBoard.innerText='You reached 5 first! You win the Game!'; yourScore.textContent=5; 
+      break;
 
+      case counterComp===4: messageBoard.innerText='The Computer reached 5 first! The Computer wins the Game!'; computerScore.textContent=5;
+      break;
 
-switch (true) {
+      case counterYou===5 || counterComp===5: resetGame();
+      break;
 
-case counterYou===4: messageBoard.textContent='You reached 5 first! You win the Game!'; yourScore.textContent=5; 
-break;
+      case userChoice==computerChoice: 
+      messageBoard.innerText=
+      `You chose ${userChoice}
+      The computer chose ${computerChoice} 
+      That means its a draw!`; 
+      counterYou++;
+      counterComp++;
+      yourScore.textContent=counterYou; 
+      computerScore.textContent=counterComp;
+      computerChoice, userChoice=undefined; 
+      break;
 
-case counterComp===4: messageBoard.textContent='The Computer reached 5 first! The Computer wins the Game!'; computerScore.textContent=5;
-break;
+      case userChoice=="Rock" && computerChoice=="Paper": 
+      messageBoard.innerText=
+      `You chose ${userChoice} 
+      The computer chose ${computerChoice} 
+      Paper Wins!`; 
+      counterComp++;
+      computerScore.textContent=counterComp;
+      computerChoice, userChoice=undefined;
+      break;
 
-case counterYou===5 || counterComp===5: resetGame();
-break;
+      case userChoice=="Paper" && computerChoice=="Rock":
+      messageBoard.innerText=
+      `You chose ${userChoice} 
+      The computer chose ${computerChoice} 
+      You Win!`; 
+      counterYou++;
+      yourScore.textContent=counterYou; 
+      computerChoice, userChoice=undefined;
+      break;
 
+      case userChoice=="Rock" && computerChoice=="Scissors":
+      messageBoard.innerText=
+      `You chose ${userChoice} 
+      The computer chose ${computerChoice} 
+      You Win!`; 
+      counterYou++;
+      yourScore.textContent=counterYou;
+      computerChoice, userChoice=undefined;
+      break;
 
- case userChoice==computerChoice: 
- messageBoard.textContent=
- `You chose ${userChoice} 
- The computer chose ${computerChoice} 
- That means its a draw!`; 
- counterYou++;
- counterComp++;
- yourScore.textContent=counterYou; 
- computerScore.textContent=counterComp;
- computerChoice, userChoice=undefined; 
- break;
+      case userChoice=="Scissors" && computerChoice=="Rock":
+      messageBoard.innerText=
+      `You chose ${userChoice} 
+      The computer chose ${computerChoice} 
+      Paper Wins`; 
+      counterComp++;
+      computerScore.textContent=counterComp;
+      computerChoice, userChoice=undefined;
+      break;
 
- case userChoice=="Rock" && computerChoice=="Paper": 
- 
- messageBoard.textContent=
- `You chose ${userChoice} 
- The computer chose ${computerChoice} 
- Paper Wins!`; 
- counterComp++;
- computerScore.textContent=counterComp;
- computerChoice, userChoice=undefined;
- break;
+      case userChoice=="Paper" && computerChoice=="Scissors":
+      messageBoard.innerText=
+      `You chose ${userChoice} 
+      The computer chose ${computerChoice} 
+      Paper Wins`; 
+      counterComp++;
+      computerScore.textContent=counterComp;
+      computerChoice, userChoice=undefined;
+      break;
 
- case userChoice=="Paper" && computerChoice=="Rock":
- messageBoard.textContent=
- `You chose ${userChoice} 
- The computer chose ${computerChoice} 
- You Win!`; 
- counterYou++;
- yourScore.textContent=counterYou; 
- computerChoice, userChoice=undefined;
- break;
-
- case userChoice=="Rock" && computerChoice=="Scissors":
- messageBoard.textContent=
- `You chose ${userChoice} 
- The computer chose ${computerChoice} 
- You Win!`; 
- counterYou++;
- yourScore.textContent=counterYou;
- computerChoice, userChoice=undefined;
- break;
-
- case userChoice=="Scissors" && computerChoice=="Rock":
- messageBoard.textContent=
- `You chose ${userChoice} 
- The computer chose ${computerChoice} 
- Paper Wins`; 
- counterComp++;
- computerScore.textContent=counterComp;
- computerChoice, userChoice=undefined;
- break;
-
- case userChoice=="Paper" && computerChoice=="Scissors":
- messageBoard.textContent=
- `You chose ${userChoice} 
- The computer chose ${computerChoice} 
- Paper Wins`; 
- counterComp++;
- computerScore.textContent=counterComp;
- computerChoice, userChoice=undefined;
- break;
-
- case userChoice=="Scissors" && computerChoice=="Paper":
- messageBoard.textContent=
- `You chose ${userChoice} 
- The computer chose ${computerChoice} 
- You Win!`;  
- counterYou++;
- yourScore.textContent=counterYou;
- computerChoice, userChoice=undefined;
- break;
- 
-} 
+      case userChoice=="Scissors" && computerChoice=="Paper":
+      messageBoard.innerText=
+      `You chose ${userChoice} 
+      The computer chose ${computerChoice} 
+      You Win!`;  
+      counterYou++;
+      yourScore.textContent=counterYou;
+      computerChoice, userChoice=undefined;
+      break;
+      } 
 
 }
+
 
 function resetGame() {
 
-messageBoard.textContent='';
-yourScore.textContent=0;
-computerScore.textContent=0;
-counterYou=0;
-counterComp=0;
-userChoice='';
-computerChoice='';
-compSelection.textContent='';
+      messageBoard.textContent='';
+      yourScore.textContent=0;
+      computerScore.textContent=0;
+      counterYou=0;
+      counterComp=0;
+      userChoice='';
+      computerChoice='';
+      compSelection.textContent='';
 
 }
-
 </script>
+
 </body>
 </html>
